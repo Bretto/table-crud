@@ -9,41 +9,134 @@
 
 
 <div class="container">
-<div class="well">
-    <div class="row">
-        <div class="col-sm-5">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" ng-model="search.$">
-                <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+    <div class="well">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search name" ng-model="search.name">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <span class="range-wrapper">
+                <span>0</span>
+                <input type="range" ng-model="age" min="0" max="10" step="1" />
+                <span>10</span>
+                    </span>
             </div>
         </div>
     </div>
-</div>
 
 
-<table class="table table-bordered table-striped user-table">
-    <thead>
-    <tr>
-        <th>#</th>
-        <th><a href="" ng-click="predicate = 'name'; reverse=!reverse">Name</a></th>
-        <th><a href="" ng-click="predicate = 'age'; reverse=!reverse">Age</a></th>
-        <th><a href="" ng-click="predicate = 'email'; reverse=!reverse">Email</a></th>
-        <th><a href="" ng-click="predicate = 'bio'; reverse=!reverse">Bio</a></th>
-        <th><a href="" ng-click="predicate = 'avatar'; reverse=!reverse">Avatar</a></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr data-ng-repeat="row in data | orderBy:predicate:reverse | filter:search" data-ng-click="onSelect(row)"
-        data-ng-class="{active: isActiveRow(row)}">
-        <td>{{$index+1}}</td>
-        <td>{{row.name}}</td>
-        <td>{{row.age}}</td>
-        <td>{{row.email}}</td>
-        <td>{{row.bio}}</td>
-        <td>{{row.avatar}}</td>
-    </tr>
-    </tbody>
-</table>
+    <!--<table class="table table-bordered table-striped user-table">-->
+    <!--<thead>-->
+    <!--<tr>-->
+    <!--<th>#</th>-->
+    <!--<th><a href="" ng-click="predicate = 'name'; reverse=!reverse">Name</a></th>-->
+    <!--<th><a href="" ng-click="predicate = 'age'; reverse=!reverse">Age</a></th>-->
+    <!--<th><a href="" ng-click="predicate = 'email'; reverse=!reverse">Email</a></th>-->
+    <!--<th><a href="" ng-click="predicate = 'bio'; reverse=!reverse">Bio</a></th>-->
+    <!--<th><a href="" ng-click="predicate = 'avatar'; reverse=!reverse">Avatar</a></th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody>-->
+    <!--<tr data-ng-repeat="row in data | filter:search | startFrom:currentPage | limitTo:10 | orderBy:predicate:reverse"-->
+    <!--data-ng-click="onSelect(row)"-->
+    <!--data-ng-class="{active: isActiveRow(row)}">-->
+    <!--<td>{{$index+1}}</td>-->
+    <!--<td>{{row.name}}</td>-->
+    <!--<td>{{row.age}}</td>-->
+    <!--<td>{{row.email}}</td>-->
+    <!--<td>{{row.bio}}</td>-->
+    <!--<td>{{row.avatar}}</td>-->
+    <!--</tr>-->
+    <!--</tbody>-->
+    <!--</table>-->
+    <!--<ul class="pagination">-->
+    <!--<li><a href="#">&laquo;</a></li>-->
+    <!--<li><a data-ng-repeat="page in [1,2,3]" data-ng-click="onPage($index)">{{$index + 1}}</a></li>-->
+    <!--<li><a href="#">&raquo;</a></li>-->
+    <!--</ul>-->
+    <div class="row form-wrap">
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button type="button" class="close" data-ng-click="onModalClose()">&times;</button>
+                    <h3 class="panel-title">Edit</h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" ng-model="editRow.name" class="form-control" placeholder="Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Age</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" ng-model="editRow.age" class="form-control" placeholder="Age">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Email</label>
+
+                            <div class="col-sm-10">
+                                <input type="email" ng-model="editRow.email" class="form-control" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Avatar</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" ng-model="editRow.avatar" class="form-control" placeholder="Avatar">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Bio</label>
+
+                            <div class="col-sm-10">
+                                <textarea class="form-control" ng-model="editRow.bio" rows="3"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button data-ng-click="onModalSave()" type="submit" class="btn btn-default">Save
+                                </button>
+                                <button data-ng-click="onModalClose()" type="submit" class="btn btn-default">Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-wrap" data-ng-class="{gridclose:isGridClose}">
+        <ul class="user-grid" scoll-to-active>
+            <li data-ng-repeat="row in data | limitTo: 50 | filter:search" class="repeat-animation"
+                scroll-if="isActiveRow(row)">
+                <div class="wrap" set-pos data-ng-click="onGridSelect(row)"
+                     data-ng-class="{active: isActiveRow(row)}">
+                    <h5>{{$index+1}}</h5>
+                    <h4>{{row.name}}</h4>
+                </div>
+                <div class="shadow-element">
+                    <h5>{{$index+1}}</h5>
+                    <h4>{{row.name}}</h4>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+
+
 </div>
 
 <div class="modal fade" data-ng-class="{modalOpen: modalOpened, in: animate}">
@@ -52,34 +145,54 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Panel title</h3>
+                    <button type="button" class="close" data-ng-click="onModalClose()">&times;</button>
+                    <h3 class="panel-title">Edit</h3>
                 </div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                            <label class="col-sm-2 control-label">Name</label>
+
                             <div class="col-sm-10">
-                                <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                                <input type="text" ng-model="editRow.name" class="form-control" placeholder="Name">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                            <label class="col-sm-2 control-label">Age</label>
+
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                                <input type="text" ng-model="editRow.age" class="form-control" placeholder="Age">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Email</label>
+
+                            <div class="col-sm-10">
+                                <input type="email" ng-model="editRow.email" class="form-control" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Avatar</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" ng-model="editRow.avatar" class="form-control" placeholder="Avatar">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Bio</label>
+
+                            <div class="col-sm-10">
+                                <textarea class="form-control" ng-model="editRow.bio" rows="3"></textarea>
+                            </div>
+                        </div>
+
+
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Remember me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default">Sign in</button>
+                                <button data-ng-click="onModalSave()" type="submit" class="btn btn-default">Save
+                                </button>
+                                <button data-ng-click="onModalClose()" type="submit" class="btn btn-default">Cancel
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -90,8 +203,9 @@
 </div>
 
 
-
+<script src="./libs/jquery.min.js"></script>
 <script src="./libs/angular.min.js"></script>
+<script src="./libs/angular-animate.min.js"></script>
 <script src="./js/app.js"></script>
 
 

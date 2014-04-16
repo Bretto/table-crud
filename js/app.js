@@ -1,13 +1,63 @@
 (function () {
     "use strict";
 
-    var appModule = angular.module('App', []);
+    var appModule = angular.module('App', ['ngAnimate']);
 
+    appModule.directive('scrollIf', function ($log, $parse, $timeout) {
+        function link(scope, element, attrs) {
+
+            scope.$watch(attrs.scrollIf, function (value) {
+                if (scope.$eval(attrs.scrollIf)) {
+                    $timeout(function () {
+                        element[0].scrollIntoView(true);
+                    }, 500)
+                }
+            })
+
+        }
+
+        return {
+            restrict: 'A',
+            link: link
+        };
+    });
+
+    appModule.directive('setPos', function ($log, $parse, $timeout) {
+
+        function link(scope, element, attrs) {
+
+            var intervalID = window.setInterval(animate, 100);
+            var target = element.parent();
+            var scroll = target.parent();
+
+            function animate() {
+                var pos = target.position();
+                element.css({top: (pos.top) + (scroll.scrollTop()), left: pos.left});
+            }
+
+            scope.$on('$destroy', function () {
+                clearInterval(intervalID);
+            });
+
+        }
+
+        return {
+            restrict: 'A',
+            link: link
+        };
+    });
+
+    appModule.filter('startFrom', function () {
+        return function (input, start) {
+            start = +start; //parse to int
+            return input.slice(start);
+        }
+    });
 
     appModule.controller('AppCtrl', function ($scope, $http, $timeout) {
         console.log('AppCtrl');
 
-
+        $scope.currentPage = 0;
         $scope.data = [
             {
                 "id": "1f58b2cb-098e-4935-a837-429358002378",
@@ -413,29 +463,53 @@
 
         $scope.onSelect = function (row) {
             $scope.activeRow = row;
+            $scope.editRow = angular.copy(row);
             $scope.modalOpened = true;
 
-            $timeout(function(){
+            $timeout(function () {
                 $scope.animate = true;
             })
+        }
+
+        $scope.onGridSelect = function (row) {
+            $scope.activeRow = row;
+            $scope.editRow = angular.copy(row);
+            $scope.isGridClose = true;
 
         }
 
+        $scope.isGridClose = false;
+
         $scope.isActiveRow = function (row) {
-            return $scope.activeRow === row;
+            return ($scope.activeRow === row);
         }
 
         $scope.getModalOpened = function () {
             return $scope.modalOpened;
         }
 
-        $scope.onModalClose = function(){
-
+        function closeModal() {
+            $scope.isGridClose = false;
+            $scope.activeRow = null;
             $scope.animate = false;
 
-            $timeout(function(){
+            $timeout(function () {
                 $scope.modalOpened = false;
             }, 150);
+        }
+
+        $scope.onModalClose = function () {
+            closeModal()
+        }
+
+        $scope.onModalSave = function () {
+            angular.copy($scope.editRow, $scope.activeRow);
+
+            closeModal()
+        }
+
+        $scope.onPage = function (index) {
+            $scope.currentPage = index;
         }
 
 
